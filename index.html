@@ -101,10 +101,22 @@ box-shadow:10px 10px 25px rgba(0,0,0,0.8);
 font-family:Tahoma;
 }
 
+/* ADDED FOR SHAKING */
+@keyframes shake {
+  0% { transform: translate(0px, 0px); }
+  25% { transform: translate(2px, -2px); }
+  50% { transform: translate(-2px, 2px); }
+  75% { transform: translate(2px, 2px); }
+  100% { transform: translate(-2px, -2px); }
+}
+
 </style>
 </head>
 
 <body>
+
+<!-- 🔊 SOUND SLOT (PASTE YOUR SOUND LINK OR ID HERE) -->
+<audio id="entitySound" loop></audio>
 
 <div id="desktop"></div>
 
@@ -114,6 +126,22 @@ font-family:Tahoma;
 </div>
 
 <script>
+
+/* =========================
+   🔊 SOUND SYSTEM (ADDED ONLY)
+   ========================= */
+
+const SOUND_SRC = "YTDown_Shorts_Hacked-computer-Sound-Effect_Media_RUyd6244gAk_009_128k.mp3"; // 👈 PASTE YOUR SOUND URL / ID HERE
+
+function playSound(){
+if(!SOUND_SRC) return;
+
+const audio = document.getElementById("entitySound");
+audio.src = SOUND_SRC;
+audio.loop = true;
+audio.volume = 1;
+audio.play();
+}
 
 /* =========================
    ICON SLOT SYSTEM (UNCHANGED)
@@ -198,12 +226,16 @@ openWindow("system32.dll",`
 }
 
 function deleteFile(btn){
+
+/* 🔊 ADDED SOUND TRIGGER (ONLY CHANGE) */
+playSound();
+
 btn.parentElement.innerHTML="Accessing file...";
 setTimeout(startHorror,800);
 }
 
 /* =========================
-   💀 ENTITY HORROR SYSTEM (UPDATED)
+   💀 ENTITY HORROR SYSTEM (UNCHANGED)
    ========================= */
 
 let started=false;
