@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Windows XP</title>
+
+<style>
+
+body{
+margin:0;
+height:100vh;
+overflow:hidden;
+font-family:Tahoma, Arial;
+background:black;
+}
+
+#desktop{
+position:absolute;
+inset:0;
+background-size:cover;
+background-position:center;
+}
+
+/* ICONS */
+.icon{
+width:90px;
+text-align:center;
+color:white;
+font-size:12px;
+position:absolute;
+cursor:pointer;
+user-select:none;
+}
+
+.icon img{
+width:52px;
+height:52px;
+}
+
+/* TASKBAR */
+#taskbar{
+position:absolute;
+bottom:0;
+left:0;
+right:0;
+height:40px;
+background:linear-gradient(#245edb,#0a246a);
+display:flex;
+align-items:center;
+padding:0 8px;
+}
+
+#start{
+background:#3a6ea5;
+color:white;
+padding:5px 14px;
+border:1px solid white;
+font-weight:bold;
+cursor:pointer;
+}
+
+#clock{
+margin-left:auto;
+color:white;
+font-size:12px;
+}
+
+/* WINDOW */
+.window{
+position:absolute;
+width:340px;
+background:#ece9d8;
+border:2px solid #000080;
+box-shadow:5px 5px 18px rgba(0,0,0,.6);
+}
+
+.titlebar{
+background:linear-gradient(#0a246a,#1e4fa3);
+color:white;
+padding:4px;
+font-size:12px;
+display:flex;
+justify-content:space-between;
+cursor:move;
+font-weight:bold;
+}
+
+.content{
+padding:12px;
+font-size:13px;
+}
+
+/* HORROR POPUP */
+.popup{
+position:absolute;
+width:380px;
+background:#ece9d8;
+border:2px solid #000;
+box-shadow:10px 10px 25px rgba(0,0,0,0.8);
+font-family:Tahoma;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="desktop"></div>
+
+<div id="taskbar">
+<div id="start">Start</div>
+<div id="clock"></div>
+</div>
+
+<script>
+
+/* =========================
+   ICON SLOT SYSTEM (UNCHANGED)
+   ========================= */
+
+const ICONS = [
+  {
+    name: "My Computer",
+    x: 30,
+    y: 30,
+    img: "Screenshot 2026-06-22 173718.png",
+    action: () => openWindow("My Computer","System Files<br>User Data")
+  },
+
+  {
+    name: "Internet",
+    x: 30,
+    y: 140,
+    img: "Screenshot 2026-06-22 173601.png",
+    action: () => openWindow("Internet Explorer","Cannot connect")
+  },
+
+  {
+    name: "Notepad",
+    x: 30,
+    y: 250,
+    img: "Screenshot 2026-06-22 173437.png",
+    action: () => openWindow("Notepad","Fake file viewer")
+  },
+
+  {
+    name: "system32.dll",
+    x: 220,
+    y: 150,
+    img: "Screenshot 2026-06-22 173117.png",
+    action: () => openVirus()
+  }
+];
+
+/* BUILD ICONS */
+ICONS.forEach(icon=>{
+const el=document.createElement("div");
+el.className="icon";
+el.style.left=icon.x+"px";
+el.style.top=icon.y+"px";
+
+el.innerHTML=`
+<img src="${icon.img}">
+<div>${icon.name}</div>
+`;
+
+el.ondblclick=icon.action;
+document.getElementById("desktop").appendChild(el);
+});
+
+/* WINDOW SYSTEM */
+function openWindow(title,text){
+
+const w=document.createElement("div");
+w.className="window";
+w.style.left="180px";
+w.style.top="120px";
+
+w.innerHTML=`
+<div class="titlebar">
+<div>${title}</div>
+<div onclick="this.parentElement.parentElement.remove()">X</div>
+</div>
+<div class="content">${text}</div>
+`;
+
+document.body.appendChild(w);
+makeDrag(w);
+}
+
+/* VIRUS TRIGGER */
+function openVirus(){
+openWindow("system32.dll",`
+<b style="color:red;">FILE CORRUPTED</b><br><br>
+<button onclick="deleteFile(this)">Delete File</button>
+`);
+}
+
+function deleteFile(btn){
+btn.parentElement.innerHTML="Accessing file...";
+setTimeout(startHorror,800);
+}
+
+/* =========================
+   💀 ENTITY HORROR SYSTEM (UPDATED)
+   ========================= */
+
+let started=false;
+
+function startHorror(){
+if(started)return;
+started=true;
+
+document.body.style.animation="shake 0.05s infinite";
+
+const messages=[
+"DO NOT LOOK BEHIND YOU",
+"IT IS INSIDE THE SYSTEM",
+"SOMETHING IS MOVING IN YOUR FILES",
+"i am coming for you.I will find you. Look behind you and you will see me.",
+"THE CURSOR IS NOT YOURS ANYMORE",
+"STOP INTERACTING WITH THE SCREEN",
+"IT KNOWS YOU ARE WATCHING",
+"WINDOWS CANNOT CONTAIN IT"
+];
+
+/* POPUPS */
+setInterval(()=>{
+
+const p=document.createElement("div");
+p.className="popup";
+p.style.left=Math.random()*window.innerWidth+"px";
+p.style.top=Math.random()*window.innerHeight+"px";
+
+const msg=messages[Math.floor(Math.random()*messages.length)];
+
+p.innerHTML=`
+<div style="
+background:linear-gradient(#000080,#0033aa);
+color:white;
+padding:4px;
+font-size:11px;
+font-weight:bold;
+display:flex;
+justify-content:space-between;
+">
+<div>Windows System Alert</div>
+<div>X</div>
+</div>
+
+<div style="display:flex;padding:12px;gap:10px;">
+<div style="font-size:26px;color:#cc0000;">⚠</div>
+
+<div style="font-size:13px;line-height:1.4;">
+A system irregularity has been detected.<br>
+Unknown presence detected in memory space.<br><br>
+
+<b style="color:#990000;">${msg}</b><br><br>
+
+System stability: UNKNOWN<br>
+User safety status: COMPROMISED
+</div>
+</div>
+`;
+
+document.body.appendChild(p);
+setTimeout(()=>p.remove(),5000);
+
+},450);
+
+/* PRESSURE EFFECT */
+setInterval(()=>{
+document.body.style.filter=
+Math.random()>0.9
+?"contrast(2) brightness(1.4) saturate(1.2)"
+:"none";
+},120);
+
+}
+
+/* DRAG */
+function makeDrag(el){
+let drag=false,ox=0,oy=0;
+
+el.querySelector(".titlebar").onmousedown=(e)=>{
+drag=true;
+ox=e.clientX-el.offsetLeft;
+oy=e.clientY-el.offsetTop;
+};
+
+document.onmousemove=(e)=>{
+if(drag){
+el.style.left=(e.clientX-ox)+"px";
+el.style.top=(e.clientY-oy)+"px";
+}
+};
+
+document.onmouseup=()=>drag=false;
+}
+
+</script>
+
+</body>
+</html>
